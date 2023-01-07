@@ -6,30 +6,54 @@ const prisma = new PrismaClient()
 
 const typeDefs = `#graphql
   type Image {
-    fileName: String
+    id: Int!
+    filename: String!
     faceDetected: FaceDetected
+
   }
   type FaceDetected {
-    faceDetected: Boolean
+    faceDetected: Boolean!
   }
   type Query {
     images: [Image]
+    imagesUnprocessed: [Image]
+  }
+  type Mutation {
+    addImage(filename: String!): Image
+    addFaceDetected(imageId: Int!, faceDetected: Boolean!): FaceDetected
   }
 `
 
 const resolvers = {
   Query: {
     images: () => {
-      return prisma.image.findMany()
+      return prisma.image.findMany({
+        include: {
+          faceDetected: true,
+        },
+      });
+    },
+    imagesUnprocessed: () => {
+      return prisma.image.findMany({
+        where: {
+          faceDetected: null,
+        },
+      });
     },
   },
-  Image: {
-    faceDetected: (parent) => {
-      return prisma.faceDetected.findMany({
-        where: {
-          filename: {
-            equals: parent.filename,
-          },
+  Mutation: {
+    addImage: (parent, args, contextValue, infos) => { 
+      return prisma.image.create({
+        data: {
+          filename: args.filename,
+        },
+      });
+    },
+    addFaceDetected: (parent, args, contextValue, info) => {
+      return prisma.faceDetected.create({
+        data: {
+          imageId: args.imageId,
+          faceDetected: args.faceDetected,
         },
       })
     },

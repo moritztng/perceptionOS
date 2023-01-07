@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-COPY prisma ./prisma
+COPY prisma/schema.prisma ./prisma/schema.prisma
 
 RUN npm install && npx prisma migrate dev --name init
 

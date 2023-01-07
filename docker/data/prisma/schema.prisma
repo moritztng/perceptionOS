@@ -8,12 +8,14 @@ datasource db {
 }
 
 model Image {
-  filename String @id
-  faceDetected   faceDetected?    @relation()
+  id          Int           @id @default(autoincrement())
+  filename    String
+  faceDetected FaceDetected?
 }
 
-model faceDetected {
-  filename  String @id
+model FaceDetected {
+  id           Int     @id @default(autoincrement())
   faceDetected Boolean
-  image    Image    @relation(fields: [filename], references: [filename])
+  image        Image   @relation(fields: [imageId], references: [id])
+  imageId      Int     @unique
 }
