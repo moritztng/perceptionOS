@@ -2,19 +2,27 @@ from gql import gql, Client
 from gql.transport.aiohttp import AIOHTTPTransport
 
 class Data:
-    def __init__(self):
-        self.transport = AIOHTTPTransport(url="https://countries.trevorblades.com/")
-        self.client = Client(transport=transport, fetch_schema_from_transport=True)
-    def __call__(self, filename):
+    def __init__(self, url):
+        self.transport = AIOHTTPTransport(url=url)
+        self.client = Client(transport=self.transport, fetch_schema_from_transport=True)
+    
+    def get_images(self):
         query = gql(
             """
-            query getContinents {
-            continents {
-                code
-                name
+            query Query {
+                images {
+                    id
+                    filename
+                    faceDetected {
+                        faceDetected
+                    }
+                }
             }
-            }
-        """
+            """
         )
-        result = client.execute(query)
-        print(result)
+        result = self.client.execute(query)
+        return result
+
+if __name__ == "__main__":
+    data = Data("http://localhost:4000")
+    print(data.get_images())

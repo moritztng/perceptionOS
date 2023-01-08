@@ -2,3 +2,4 @@ numpy
 opencv-python-headless
 Flask
 Flask-GraphQL
+gql[all]==3.4.0

@@ -1,13 +1,15 @@
 # syntax=docker/dockerfile:1
 
-FROM python:3.9-bullseye
+FROM golang:1.19
 
-WORKDIR /app
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y libopencv-dev
 
-COPY requirements.txt .
-RUN pip3.9 install -r requirements.txt
+WORKDIR /usr/local/bin/app
 
-COPY perception perception
-COPY docker/camera/app.py .
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
 
-CMD [ "python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+COPY . .
+RUN go build -v -o /usr/local/bin/app ./...
+
+CMD ["app"]
