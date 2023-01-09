@@ -1,3 +1,3 @@
-module github.com/moritztng/goperception
+module github.com/moritztng/perceptionOS/goperception
 
 go 1.19
