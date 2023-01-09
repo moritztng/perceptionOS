@@ -1,7 +1,12 @@
+#pragma once
+
 #ifdef __cplusplus
+#include <opencv2/opencv.hpp>
 extern "C" {
 #endif
- void image();
+typedef void* VideoCapture;
+VideoCapture camera(char* url);
+void save_image(VideoCapture camera, const char* filename);
 #ifdef __cplusplus
 }
 #endif

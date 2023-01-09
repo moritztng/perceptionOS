@@ -11,9 +11,12 @@ import (
 // #cgo CXXFLAGS: -std=c++14 -I. -I/usr/include/opencv2
 // #include "camera.h"
 import "C"
-
+type VideoCapture struct {
+	p C.VideoCapture
+}
 func handler(w http.ResponseWriter, r *http.Request) {
-	C.image()
+    capture := VideoCapture{p: C.camera(C.CString("hi"))} 
+    C.save_image(capture.p, C.CString("hi"));
     fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
 }
 

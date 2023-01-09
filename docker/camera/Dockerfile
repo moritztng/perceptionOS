@@ -6,10 +6,12 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y libopenc
 
 WORKDIR /usr/local/bin/app
 
-COPY go.mod go.sum ./
+COPY go.mod ./
 RUN go mod download && go mod verify
 
-COPY . .
-RUN go build -v -o /usr/local/bin/app ./...
+RUN mv /usr/include/opencv4/opencv2 /usr/include/opencv2
 
-CMD ["app"]
+COPY . .
+RUN go build -v -o /app
+
+CMD ["/app"]

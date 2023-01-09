@@ -1,6 +1,14 @@
+*
+!*.*
+!*/
+
 *.pyc
 *.db
 env
 node_modules
 dist
 migrations
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
