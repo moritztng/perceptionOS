@@ -14,16 +14,16 @@ type VideoCapture struct {
 	p C.VideoCapture
 }
 
-func camera(url string) (capture *VideoCapture) {
-    var curl *C.char = C.CString(url)
+func Camera(url string) (capture *VideoCapture) {
+	var curl *C.char = C.CString(url)
 	defer C.free(unsafe.Pointer(curl))
 	capture = &VideoCapture{p: C.camera(curl)}
-    return
+	return
 }
 
 func (capture *VideoCapture) SaveImage(filename string) {
-    var cfilename *C.char = C.CString(filename)
+	var cfilename *C.char = C.CString(filename)
 	defer C.free(unsafe.Pointer(cfilename))
 	C.save_image(capture.p, cfilename)
-    return
+	return
 }

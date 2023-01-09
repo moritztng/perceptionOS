@@ -1,12 +1,13 @@
 package main
 
 import (
-    "github.com/moritztng/perceptionOS/goperception"
 	"fmt"
+
+	"github.com/moritztng/perceptionOS/goperception"
 )
 
 func main() {
-	capture := goperception.camera("asdf")
-    capture.SaveImage("asdf")
-    fmt.Println("Hello, World!")
+	capture := goperception.Camera("asdf")
+	capture.SaveImage("asdf")
+	fmt.Println("Hello, World!")
 }
