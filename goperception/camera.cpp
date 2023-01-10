@@ -3,7 +3,7 @@
 #include "camera.h"
 
 VideoCapture camera(char* url) {
-    return new cv::VideoCapture();
+    return new cv::VideoCapture(url);
 }
 
 void save_image(VideoCapture camera, const char* filename)

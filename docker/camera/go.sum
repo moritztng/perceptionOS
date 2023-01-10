@@ -1,0 +1,6 @@
+github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
+github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+github.com/moritztng/perceptionOS/goperception v0.0.0-20230109114725-d2d675f3607d h1:ognIVSDg2VAKRIFTi6HgUc2lR4a8n7bJ58i9UNe/gwc=
+github.com/moritztng/perceptionOS/goperception v0.0.0-20230109114725-d2d675f3607d/go.mod h1:416rWRhFmsvh1VxjGgfq+ed4IR9BtoyZiKjqTzGVQUQ=
+github.com/moritztng/perceptionOS/goperception v0.0.0-20230109163611-4fbbae87b7da h1:pNq+j7bUYT09dTL2h8kTbRPlP8Qs0EkxYqS2HwzDAjA=
+github.com/moritztng/perceptionOS/goperception v0.0.0-20230109163611-4fbbae87b7da/go.mod h1:416rWRhFmsvh1VxjGgfq+ed4IR9BtoyZiKjqTzGVQUQ=
