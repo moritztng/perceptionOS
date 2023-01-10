@@ -6,7 +6,7 @@ import (
 )
 
 type Database struct {
-	db DB
+	db gorm.DB
 }
 
 type ImageWithFaceDetected struct {
