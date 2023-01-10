@@ -8,67 +8,36 @@ import (
 	"context"
 
 	"github.com/moritztng/perceptionOS/docker/api/graph/model"
-	"github.com/moritztng/perceptionOS/docker/api/storage"
 )
 
 // AddImage is the resolver for the addImage field.
 func (r *mutationResolver) AddImage(ctx context.Context, filename string) (*model.Image, error) {
-	//rand, _ := rand.Int(rand.Reader, big.NewInt(100))
-	// output := &model.Image{
-	//	Filename:   filename,
-	//	ID:     fmt.Sprintf("T%d", rand.Int()),
-	//	FaceDetected:   nil,
-	//}
-	image := storage.Image{Filename: filename}
-	r.DB.Create(&image)
+	image := r.DB.addImage(filename)
 	return &model.Image{ID: int(image.ID), Filename: image.Filename}, nil
 }
 
 // AddFaceDetected is the resolver for the addFaceDetected field.
 func (r *mutationResolver) AddFaceDetected(ctx context.Context, imageID int, faceDetected bool) (*model.FaceDetected, error) {
-	detected := storage.FaceDetected{ImageID: imageID, FaceDetected: faceDetected}
-	r.DB.Create(&detected)
+	detected := r.DB.addFaceDetected(uint(imageID), faceDetected)
 	return &model.FaceDetected{FaceDetected: detected.FaceDetected}, nil
 }
 
 // Images is the resolver for the images field.
 func (r *queryResolver) Images(ctx context.Context) ([]*model.Image, error) {
-	result := []struct {
-		ID           uint
-		Filename     string
-		FaceDetected *bool
-	}{}
-	r.DB.Model(&storage.Image{}).Select("images.id, images.filename, face_detecteds.face_detected").Joins("left join face_detecteds on images.id = face_detecteds.image_id").Scan(&result)
-	output := make([]*model.Image, len(result))
-	for index, image := range result {
-		var faceDetected *model.FaceDetected
-		if image.FaceDetected == nil {
-			faceDetected = nil
-		} else {
-			faceDetected = &model.FaceDetected{FaceDetected: *image.FaceDetected}
-		}
-		output[index] = &model.Image{ID: int(image.ID), Filename: image.Filename, FaceDetected: faceDetected}
+	images := r.DB.GetAllImages()
+	output := make([]*model.Image, len(images))
+	for index, image := range images {
+		output[index] = &model.Image{ID: int(image.ID), Filename: image.Filename, FaceDetected: image.faceDetected}
 	}
 	return output, nil
 }
 
 // ImagesUnprocessed is the resolver for the imagesUnprocessed field.
 func (r *queryResolver) ImagesUnprocessed(ctx context.Context) ([]*model.Image, error) {
-	result := []struct {
-		ID           uint
-		Filename     string
-		FaceDetected *bool
-	}{}
-	r.DB.Model(&storage.Image{}).Select("images.id, images.filename, face_detecteds.face_detected").Joins("left join face_detecteds on images.id = face_detecteds.image_id").Where("face_detecteds.id is NULL").Scan(&result)
-	output := make([]*model.Image, len(result))
-	for index, image := range result {
-		var faceDetected *model.FaceDetected
-		if image.FaceDetected == nil {
-			faceDetected = nil
-		} else {
-			faceDetected = &model.FaceDetected{FaceDetected: *image.FaceDetected}
-		}
-		output[index] = &model.Image{ID: int(image.ID), Filename: image.Filename, FaceDetected: faceDetected}
+	images := r.DB.GetUnprocessedImages()
+	output := make([]*model.Image, len(images))
+	for index, image := range images {
+		output[index] = &model.Image{ID: int(image.ID), Filename: image.Filename, FaceDetected: image.faceDetected}
 	}
 	return output, nil
 }

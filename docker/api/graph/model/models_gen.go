@@ -7,7 +7,7 @@ type FaceDetected struct {
 }
 
 type Image struct {
-	ID           int           `json:"id"`
+	ID           string        `json:"id"`
 	Filename     string        `json:"filename"`
 	FaceDetected *FaceDetected `json:"faceDetected"`
 }

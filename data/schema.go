@@ -1,4 +1,4 @@
-package storage
+package data
 
 import (
 	"gorm.io/gorm"
@@ -13,5 +13,5 @@ type FaceDetected struct {
 	gorm.Model
 	FaceDetected bool
 	ImageID      int
-	Image        Image `gorm:"embedded"`
+	Image        Image
 }

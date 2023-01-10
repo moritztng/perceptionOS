@@ -7,29 +7,21 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
+	"github.com/moritztng/perceptionOS/data"
 	"github.com/moritztng/perceptionOS/docker/api/graph"
-	"github.com/moritztng/perceptionOS/docker/api/storage"
-
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 )
 
 const defaultPort = "8080"
 
 func main() {
-	db, err := gorm.Open(sqlite.Open("images.db"), &gorm.Config{})
-	if err != nil {
-		panic("failed to connect database")
-	}
+	database := data.Open("images.db")
 
-	// Migrate the schema
-	db.AutoMigrate(&storage.Image{}, &storage.FaceDetected{})
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
 	}
 
-	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{DB: db}}))
+	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{DB: database}}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)
