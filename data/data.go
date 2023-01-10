@@ -11,7 +11,7 @@ type Database struct {
 
 type ImageWithFaceDetected struct {
 	Image
-	faceDetected *FaceDetected
+	FaceDetected *FaceDetected
 }
 
 func Open(filename string) Database {
