@@ -6,11 +6,12 @@ import (
 )
 
 type Database struct {
-	db gorm.DB
+	db *gorm.DB
 }
 
 type ImageWithFaceDetected struct {
-	Image
+	ID           uint
+	Filename     string
 	FaceDetected *FaceDetected
 }
 
@@ -20,7 +21,7 @@ func Open(filename string) Database {
 		panic("failed to connect database")
 	}
 	db.AutoMigrate(&Image{}, &FaceDetected{})
-	database := Database{db}
+	database := Database{db: db}
 	return database
 }
 
@@ -37,13 +38,12 @@ func (database *Database) AddFaceDetected(imageID uint, faceDetected bool) FaceD
 }
 
 func (database *Database) GetAllImages() []*ImageWithFaceDetected {
-	detected := FaceDetected{ImageID: imageID, FaceDetected: faceDetected}
 	result := []struct {
 		ID           uint
 		Filename     string
 		FaceDetected *bool
 	}{}
-	r.DB.Model(&Image{}).Select("images.id, images.filename, face_detecteds.face_detected").Joins("left join face_detecteds on images.id = face_detecteds.image_id").Scan(&result)
+	database.db.Model(&Image{}).Select("images.id, images.filename, face_detecteds.face_detected").Joins("left join face_detecteds on images.id = face_detecteds.image_id").Scan(&result)
 	output := make([]*ImageWithFaceDetected, len(result))
 	for index, image := range result {
 		var faceDetected *FaceDetected
@@ -52,19 +52,18 @@ func (database *Database) GetAllImages() []*ImageWithFaceDetected {
 		} else {
 			faceDetected = &FaceDetected{FaceDetected: *image.FaceDetected}
 		}
-		output[index] = &ImageWithFaceDetected{ID: int(image.ID), Filename: image.Filename, FaceDetected: faceDetected}
+		output[index] = &ImageWithFaceDetected{ID: image.ID, Filename: image.Filename, FaceDetected: faceDetected}
 	}
 	return output
 }
 
 func (database *Database) GetUnprocessedImages() []*ImageWithFaceDetected {
-	detected := FaceDetected{ImageID: imageID, FaceDetected: faceDetected}
 	result := []struct {
 		ID           uint
 		Filename     string
 		FaceDetected *bool
 	}{}
-	r.DB.Model(&Image{}).Select("images.id, images.filename, face_detecteds.face_detected").Joins("left join face_detecteds on images.id = face_detecteds.image_id").Where("face_detecteds.id is NULL").Scan(&result)
+	database.db.Model(&Image{}).Select("images.id, images.filename, face_detecteds.face_detected").Joins("left join face_detecteds on images.id = face_detecteds.image_id").Where("face_detecteds.id is NULL").Scan(&result)
 	output := make([]*ImageWithFaceDetected, len(result))
 	for index, image := range result {
 		var faceDetected *FaceDetected
@@ -73,7 +72,7 @@ func (database *Database) GetUnprocessedImages() []*ImageWithFaceDetected {
 		} else {
 			faceDetected = &FaceDetected{FaceDetected: *image.FaceDetected}
 		}
-		output[index] = &ImageWithFaceDetected{ID: int(image.ID), Filename: image.Filename, FaceDetected: faceDetected}
+		output[index] = &ImageWithFaceDetected{ID: image.ID, Filename: image.Filename, FaceDetected: faceDetected}
 	}
 	return output
 }

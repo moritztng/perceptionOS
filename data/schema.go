@@ -12,6 +12,6 @@ type Image struct {
 type FaceDetected struct {
 	gorm.Model
 	FaceDetected bool
-	ImageID      int
+	ImageID      uint
 	Image        Image
 }
