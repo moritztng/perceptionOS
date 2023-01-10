@@ -1,5 +1,9 @@
 package graph
 
+import (
+	"github.com/moritztng/perceptionOS/data"
+)
+
 type Resolver struct {
-	DB *Database
+	DB *data.Database
 }

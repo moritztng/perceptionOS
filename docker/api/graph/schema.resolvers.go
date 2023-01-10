@@ -12,13 +12,13 @@ import (
 
 // AddImage is the resolver for the addImage field.
 func (r *mutationResolver) AddImage(ctx context.Context, filename string) (*model.Image, error) {
-	image := r.DB.addImage(filename)
+	image := r.DB.AddImage(filename)
 	return &model.Image{ID: int(image.ID), Filename: image.Filename}, nil
 }
 
 // AddFaceDetected is the resolver for the addFaceDetected field.
 func (r *mutationResolver) AddFaceDetected(ctx context.Context, imageID int, faceDetected bool) (*model.FaceDetected, error) {
-	detected := r.DB.addFaceDetected(uint(imageID), faceDetected)
+	detected := r.DB.AddFaceDetected(uint(imageID), faceDetected)
 	return &model.FaceDetected{FaceDetected: detected.FaceDetected}, nil
 }
 
@@ -27,7 +27,13 @@ func (r *queryResolver) Images(ctx context.Context) ([]*model.Image, error) {
 	images := r.DB.GetAllImages()
 	output := make([]*model.Image, len(images))
 	for index, image := range images {
-		output[index] = &model.Image{ID: int(image.ID), Filename: image.Filename, FaceDetected: image.faceDetected}
+		var detected *model.FaceDetected
+		if image.FaceDetected == nil {
+			detected = nil
+		} else {
+			detected = &model.FaceDetected{FaceDetected: image.FaceDetected.FaceDetected}
+		}
+		output[index] = &model.Image{ID: int(image.ID), Filename: image.Filename, FaceDetected: detected}
 	}
 	return output, nil
 }
@@ -37,7 +43,13 @@ func (r *queryResolver) ImagesUnprocessed(ctx context.Context) ([]*model.Image, 
 	images := r.DB.GetUnprocessedImages()
 	output := make([]*model.Image, len(images))
 	for index, image := range images {
-		output[index] = &model.Image{ID: int(image.ID), Filename: image.Filename, FaceDetected: image.faceDetected}
+		var detected *model.FaceDetected
+		if image.FaceDetected == nil {
+			detected = nil
+		} else {
+			detected = &model.FaceDetected{FaceDetected: image.FaceDetected.FaceDetected}
+		}
+		output[index] = &model.Image{ID: int(image.ID), Filename: image.Filename, FaceDetected: detected}
 	}
 	return output, nil
 }

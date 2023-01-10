@@ -1,5 +1,5 @@
 type Image {
-  id: ID!
+  id: Int!
   filename: String!
   faceDetected: FaceDetected
 }
@@ -12,5 +12,5 @@ type Query {
 }
 type Mutation {
   addImage(filename: String!): Image
-  addFaceDetected(imageId: ID!, faceDetected: Boolean!): FaceDetected
+  addFaceDetected(imageId: Int!, faceDetected: Boolean!): FaceDetected
 }
