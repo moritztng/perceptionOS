@@ -1,0 +1,32 @@
+query Images {
+  images {
+    id
+    filename
+    faceDetected {
+      faceDetected
+    }
+  }
+}
+
+query ImagesUnprocessed {
+  imagesUnprocessed {
+    id
+    filename
+    faceDetected {
+      faceDetected
+    }
+  }
+}
+
+mutation AddImage($filename: String!) {
+  addImage(filename: $filename) {
+    id
+    filename
+  }
+}
+
+mutation AddFaceDetected($imageId: Int!, $faceDetected: Boolean!) {
+  addFaceDetected(imageId: $imageId, faceDetected: $faceDetected) {
+    faceDetected
+  }
+}

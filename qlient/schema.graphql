@@ -1,0 +1,17 @@
+type Image {
+  id: Int!
+  filename: String!
+  faceDetected: FaceDetected
+}
+type FaceDetected {
+  faceDetected: Boolean!
+}
+type Query {
+  images: [Image]
+  imagesUnprocessed: [Image]
+  takeImage: String!
+}
+type Mutation {
+  addImage(filename: String!): Image
+  addFaceDetected(imageId: Int!, faceDetected: Boolean!): FaceDetected
+}
