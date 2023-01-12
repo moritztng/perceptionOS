@@ -5,18 +5,21 @@ go 1.19
 require (
 	github.com/99designs/gqlgen v0.17.22
 	github.com/moritztng/perceptionOS/data v0.0.0-20230110174958-96da6411c681
+	github.com/moritztng/perceptionOS/messaging v0.0.0-20230111011305-5581d3f0dd3a
 	github.com/vektah/gqlparser/v2 v2.5.1
 )
 
 require (
 	github.com/agnivade/levenshtein v1.1.1 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
+	github.com/golang/snappy v0.0.1 // indirect
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/mattn/go-sqlite3 v1.14.15 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
+	github.com/nsqio/go-nsq v1.1.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/urfave/cli/v2 v2.8.1 // indirect
 	github.com/xrash/smetrics v0.0.0-20201216005158-039620a65673 // indirect

@@ -9,6 +9,7 @@ type FaceDetected {
 type Query {
   images: [Image]
   imagesUnprocessed: [Image]
+  takeImage: String!
 }
 type Mutation {
   addImage(filename: String!): Image

@@ -54,6 +54,12 @@ func (r *queryResolver) ImagesUnprocessed(ctx context.Context) ([]*model.Image, 
 	return output, nil
 }
 
+// TakeImage is the resolver for the takeImage field.
+func (r *queryResolver) TakeImage(ctx context.Context) (string, error) {
+	r.MessageProducer.PublishImageRequest()
+	return "", nil
+}
+
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
