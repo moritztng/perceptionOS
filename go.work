@@ -1,0 +1,10 @@
+go 1.19
+
+use (
+	./goperception
+	./messaging
+	./data
+	./qlient
+	./docker/api
+	./docker/camera
+)
