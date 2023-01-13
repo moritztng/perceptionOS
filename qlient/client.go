@@ -7,7 +7,7 @@ import (
 	"github.com/Khan/genqlient/graphql"
 )
 
-func NewClient() graphql.Client {
-	graphqlClient := graphql.NewClient("http://localhost:8080/query", http.DefaultClient)
+func NewClient(url string) graphql.Client {
+	graphqlClient := graphql.NewClient(url, http.DefaultClient)
 	return graphqlClient
 }

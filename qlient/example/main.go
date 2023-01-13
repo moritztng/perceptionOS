@@ -9,7 +9,7 @@ import (
 
 func main() {
 	ctx := context.Background()
-	client := qlient.NewClient()
+	client := qlient.NewClient("http://localhost:8080/query")
 	resp, err := qlient.AddImage(ctx, client, "file.png")
 	fmt.Println(resp.AddImage.Id, err)
 }
