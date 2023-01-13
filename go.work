@@ -4,6 +4,7 @@ use (
 	./goperception
 	./messaging
 	./data
+	./storage
 	./qlient
 	./docker/api
 	./docker/camera
