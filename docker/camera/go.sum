@@ -3,6 +3,8 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/dustin/go-humanize v1.0.0 h1:VSnTsYCnlFHaM2/igO1h6X3HA71jcobQuxemgkq4zYo=
 github.com/dustin/go-humanize v1.0.0/go.mod h1:HtrtbFcZ19U5GC7JDqmcUSB87Iq5E25KnS6fMYU6eOk=
+github.com/golang/snappy v0.0.1 h1:Qgr9rKW7uDUkrbSmQeiDsGa8SjGyCOGtuasMWwvp2P4=
+github.com/golang/snappy v0.0.1/go.mod h1:/XxbfmMg8lxefKM7IXC3fBNl/7bRcc72aCRzEWrmP2Q=
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
 github.com/google/uuid v1.3.0 h1:t6JiXgmwXMjEs8VusXIJk2BXHsn+wx8BZdTaoZ5fu7I=
 github.com/google/uuid v1.3.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
@@ -29,8 +31,12 @@ github.com/modern-go/reflect2 v1.0.2 h1:xBagoLtFs94CBntxluKeaWgTMpvLxC4ur3nMaC9G
 github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjYzDa0/r8luk=
 github.com/moritztng/perceptionOS/goperception v0.0.0-20230112020450-fdbe634aae3a h1:LjRavwf6zPwjRqmxla1yJyZpL/g2k6Le337dU06YkbM=
 github.com/moritztng/perceptionOS/goperception v0.0.0-20230112020450-fdbe634aae3a/go.mod h1:416rWRhFmsvh1VxjGgfq+ed4IR9BtoyZiKjqTzGVQUQ=
+github.com/moritztng/perceptionOS/messaging v0.0.0-20230113011526-8b9b84145328 h1:dzVZsSoyupt1nR1Uc2POc8Y5XE5+F767EN0UlXe1Zf4=
+github.com/moritztng/perceptionOS/messaging v0.0.0-20230113011526-8b9b84145328/go.mod h1:kk8zOc/uAimvqBuuHfULJwpW/HH9JawC4qg4Z2+0OJM=
 github.com/moritztng/perceptionOS/storage v0.0.0-20230113000954-d7a20573dbef h1:uff4ODP/Tp1ONM8Ii4snnO83M4tSyg2XTE9xW5xETMQ=
 github.com/moritztng/perceptionOS/storage v0.0.0-20230113000954-d7a20573dbef/go.mod h1:sM33DQ4HjjAhVoMe0SAfuOcHZCg+9FwBoh9kNH5rPeA=
+github.com/nsqio/go-nsq v1.1.0 h1:PQg+xxiUjA7V+TLdXw7nVrJ5Jbl3sN86EhGCQj4+FYE=
+github.com/nsqio/go-nsq v1.1.0/go.mod h1:vKq36oyeVXgsS5Q8YEO7WghqidAVXQlcFxzQbQTuDEY=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/rs/xid v1.4.0 h1:qd7wPTDkN6KQx2VmMBLrpHkiyQwgFXRnkOLacUiaSNY=

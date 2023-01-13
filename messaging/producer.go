@@ -11,9 +11,9 @@ type Producer struct {
 	producer *nsq.Producer
 }
 
-func NewProducer() Producer {
+func NewProducer(address string) Producer {
 	config := nsq.NewConfig()
-	nsqProducer, err := nsq.NewProducer("127.0.0.1:4150", config)
+	nsqProducer, err := nsq.NewProducer(address, config)
 	if err != nil {
 		log.Fatal(err)
 	}

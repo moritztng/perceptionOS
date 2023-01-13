@@ -37,8 +37,8 @@ func NewProcessConsumer(handler func(string)) Consumer {
 	return consumer
 }
 
-func (consumer *Consumer) Listen() {
-	err := consumer.consumer.ConnectToNSQLookupd("localhost:4161")
+func (consumer *Consumer) Listen(address string) {
+	err := consumer.consumer.ConnectToNSQLookupd(address)
 	if err != nil {
 		log.Fatal(err)
 	}
