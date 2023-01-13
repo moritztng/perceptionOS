@@ -4,6 +4,7 @@
 
 *.pyc
 *.db
+*.jpg
 env
 node_modules
 dist
