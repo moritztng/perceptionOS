@@ -8,6 +8,7 @@ import "C"
 
 import (
 	"image"
+	_ "image/jpeg"
 	"log"
 	"os"
 	"reflect"
