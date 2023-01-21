@@ -16,7 +16,7 @@ const defaultPort = "8080"
 
 func main() {
 	database := data.Open("images.db")
-	messageProducer := messaging.NewProducer()
+	messageProducer := messaging.NewProducer("127.0.0.1:4150")
 
 	port := os.Getenv("PORT")
 	if port == "" {

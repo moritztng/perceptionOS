@@ -16,10 +16,10 @@ func (r *mutationResolver) AddImage(ctx context.Context, filename string) (*mode
 	return &model.Image{ID: int(image.ID), Filename: image.Filename}, nil
 }
 
-// AddFaceDetected is the resolver for the addFaceDetected field.
-func (r *mutationResolver) AddFaceDetected(ctx context.Context, imageID int, faceDetected bool) (*model.FaceDetected, error) {
-	detected := r.DB.AddFaceDetected(uint(imageID), faceDetected)
-	return &model.FaceDetected{FaceDetected: detected.FaceDetected}, nil
+// AddDetection is the resolver for the addDetection field.
+func (r *mutationResolver) AddDetection(ctx context.Context, imageID int, person float64) (*model.Detection, error) {
+	detection := r.DB.AddDetection(uint(imageID), float32(person))
+	return &model.Detection{Person: float64(detection.Person)}, nil
 }
 
 // Images is the resolver for the images field.
@@ -27,30 +27,27 @@ func (r *queryResolver) Images(ctx context.Context) ([]*model.Image, error) {
 	images := r.DB.GetAllImages()
 	output := make([]*model.Image, len(images))
 	for index, image := range images {
-		var detected *model.FaceDetected
-		if image.FaceDetected == nil {
-			detected = nil
+		var detection *model.Detection
+		if image.Detection == nil {
+			detection = nil
 		} else {
-			detected = &model.FaceDetected{FaceDetected: image.FaceDetected.FaceDetected}
+			detection = &model.Detection{Person: float64(image.Detection.Person)}
 		}
-		output[index] = &model.Image{ID: int(image.ID), Filename: image.Filename, FaceDetected: detected}
+		output[index] = &model.Image{ID: int(image.ID), Filename: image.Filename, Detection: detection}
 	}
 	return output, nil
 }
 
-// ImagesUnprocessed is the resolver for the imagesUnprocessed field.
-func (r *queryResolver) ImagesUnprocessed(ctx context.Context) ([]*model.Image, error) {
-	images := r.DB.GetUnprocessedImages()
-	output := make([]*model.Image, len(images))
-	for index, image := range images {
-		var detected *model.FaceDetected
-		if image.FaceDetected == nil {
-			detected = nil
-		} else {
-			detected = &model.FaceDetected{FaceDetected: image.FaceDetected.FaceDetected}
-		}
-		output[index] = &model.Image{ID: int(image.ID), Filename: image.Filename, FaceDetected: detected}
+// Image is the resolver for the image field.
+func (r *queryResolver) Image(ctx context.Context, imageID int) (*model.Image, error) {
+	image := r.DB.GetImage(uint(imageID))
+	var detection *model.Detection
+	if image.Detection == nil {
+		detection = nil
+	} else {
+		detection = &model.Detection{Person: float64(image.Detection.Person)}
 	}
+	output := &model.Image{ID: int(image.ID), Filename: image.Filename, Detection: detection}
 	return output, nil
 }
 

@@ -2,12 +2,12 @@
 
 package model
 
-type FaceDetected struct {
-	FaceDetected bool `json:"faceDetected"`
+type Detection struct {
+	Person float64 `json:"person"`
 }
 
 type Image struct {
-	ID           int           `json:"id"`
-	Filename     string        `json:"filename"`
-	FaceDetected *FaceDetected `json:"faceDetected"`
+	ID        int        `json:"id"`
+	Filename  string     `json:"filename"`
+	Detection *Detection `json:"Detection"`
 }
