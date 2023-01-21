@@ -2,19 +2,25 @@ query Images {
   images {
     id
     filename
-    faceDetected {
-      faceDetected
+    Detection {
+      person
     }
   }
 }
 
-query ImagesUnprocessed {
-  imagesUnprocessed {
+query Image($imageId: Int!) {
+  image(imageId: $imageId) {
     id
     filename
-    faceDetected {
-      faceDetected
+    Detection {
+      person
     }
+  }
+}
+
+query ImageFilename($imageId: Int!) {
+  image(imageId: $imageId) {
+    filename
   }
 }
 
@@ -25,8 +31,8 @@ mutation AddImage($filename: String!) {
   }
 }
 
-mutation AddFaceDetected($imageId: Int!, $faceDetected: Boolean!) {
-  addFaceDetected(imageId: $imageId, faceDetected: $faceDetected) {
-    faceDetected
+mutation AddDetection($imageId: Int!, $person: Float!) {
+  addDetection(imageId: $imageId, person: $person) {
+    person
   }
 }
