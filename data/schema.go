@@ -9,9 +9,9 @@ type Image struct {
 	Filename string
 }
 
-type FaceDetected struct {
+type Detection struct {
 	gorm.Model
-	FaceDetected bool
-	ImageID      uint
-	Image        Image
+	Person  float32
+	ImageID uint
+	Image   Image
 }
