@@ -37,6 +37,11 @@ func NewProcessConsumer(handler func(string)) Consumer {
 	return consumer
 }
 
+func NewNotificationConsumer(handler func(string)) Consumer {
+	consumer := newConsumer("image_processes", "notification", handler)
+	return consumer
+}
+
 func (consumer *Consumer) Listen(address string) {
 	err := consumer.consumer.ConnectToNSQLookupd(address)
 	if err != nil {
