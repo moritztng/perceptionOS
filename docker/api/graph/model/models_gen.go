@@ -3,11 +3,14 @@
 package model
 
 type Detection struct {
-	Person float64 `json:"person"`
+	ID      int     `json:"id"`
+	ImageID int     `json:"imageId"`
+	Person  float64 `json:"person"`
+	Image   *Image  `json:"image"`
 }
 
 type Image struct {
 	ID        int        `json:"id"`
 	Filename  string     `json:"filename"`
-	Detection *Detection `json:"Detection"`
+	Detection *Detection `json:"detection"`
 }

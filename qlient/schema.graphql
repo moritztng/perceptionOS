@@ -1,14 +1,17 @@
 type Image {
   id: Int!
   filename: String!
-  Detection: Detection
+  detection: Detection
 }
 type Detection {
+  id: Int!
+  imageId: Int!
   person: Float!
+  image: Image
 }
 type Query {
-  images: [Image]
-  image(imageId: Int!): Image
+  image(id: Int!): Image
+  detection(id: Int!): Detection
   takeImage: String!
 }
 type Mutation {

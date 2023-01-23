@@ -1,25 +1,27 @@
-query Images {
-  images {
+query Image($id: Int!) {
+  image(id: $id) {
     id
     filename
-    Detection {
+    detection {
+      id
       person
     }
   }
 }
 
-query Image($imageId: Int!) {
-  image(imageId: $imageId) {
+query Detection($id: Int!) {
+  detection(id: $id) {
     id
-    filename
-    Detection {
-      person
+    person
+    image {
+      id
+      filename
     }
   }
 }
 
-query ImageFilename($imageId: Int!) {
-  image(imageId: $imageId) {
+query ImageFilename($id: Int!) {
+  image(id: $id) {
     filename
   }
 }
@@ -33,6 +35,8 @@ mutation AddImage($filename: String!) {
 
 mutation AddDetection($imageId: Int!, $person: Float!) {
   addDetection(imageId: $imageId, person: $person) {
+    id
+    imageId
     person
   }
 }

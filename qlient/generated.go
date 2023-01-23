@@ -10,8 +10,16 @@ import (
 
 // AddDetectionAddDetection includes the requested fields of the GraphQL type Detection.
 type AddDetectionAddDetection struct {
-	Person float64 `json:"person"`
+	Id      int     `json:"id"`
+	ImageId int     `json:"imageId"`
+	Person  float64 `json:"person"`
 }
+
+// GetId returns AddDetectionAddDetection.Id, and is useful for accessing the field via an interface.
+func (v *AddDetectionAddDetection) GetId() int { return v.Id }
+
+// GetImageId returns AddDetectionAddDetection.ImageId, and is useful for accessing the field via an interface.
+func (v *AddDetectionAddDetection) GetImageId() int { return v.ImageId }
 
 // GetPerson returns AddDetectionAddDetection.Person, and is useful for accessing the field via an interface.
 func (v *AddDetectionAddDetection) GetPerson() float64 { return v.Person }
@@ -44,6 +52,42 @@ type AddImageResponse struct {
 // GetAddImage returns AddImageResponse.AddImage, and is useful for accessing the field via an interface.
 func (v *AddImageResponse) GetAddImage() AddImageAddImage { return v.AddImage }
 
+// DetectionDetection includes the requested fields of the GraphQL type Detection.
+type DetectionDetection struct {
+	Id     int                     `json:"id"`
+	Person float64                 `json:"person"`
+	Image  DetectionDetectionImage `json:"image"`
+}
+
+// GetId returns DetectionDetection.Id, and is useful for accessing the field via an interface.
+func (v *DetectionDetection) GetId() int { return v.Id }
+
+// GetPerson returns DetectionDetection.Person, and is useful for accessing the field via an interface.
+func (v *DetectionDetection) GetPerson() float64 { return v.Person }
+
+// GetImage returns DetectionDetection.Image, and is useful for accessing the field via an interface.
+func (v *DetectionDetection) GetImage() DetectionDetectionImage { return v.Image }
+
+// DetectionDetectionImage includes the requested fields of the GraphQL type Image.
+type DetectionDetectionImage struct {
+	Id       int    `json:"id"`
+	Filename string `json:"filename"`
+}
+
+// GetId returns DetectionDetectionImage.Id, and is useful for accessing the field via an interface.
+func (v *DetectionDetectionImage) GetId() int { return v.Id }
+
+// GetFilename returns DetectionDetectionImage.Filename, and is useful for accessing the field via an interface.
+func (v *DetectionDetectionImage) GetFilename() string { return v.Filename }
+
+// DetectionResponse is returned by Detection on success.
+type DetectionResponse struct {
+	Detection DetectionDetection `json:"detection"`
+}
+
+// GetDetection returns DetectionResponse.Detection, and is useful for accessing the field via an interface.
+func (v *DetectionResponse) GetDetection() DetectionDetection { return v.Detection }
+
 // ImageFilenameImage includes the requested fields of the GraphQL type Image.
 type ImageFilenameImage struct {
 	Filename string `json:"filename"`
@@ -64,7 +108,7 @@ func (v *ImageFilenameResponse) GetImage() ImageFilenameImage { return v.Image }
 type ImageImage struct {
 	Id        int                 `json:"id"`
 	Filename  string              `json:"filename"`
-	Detection ImageImageDetection `json:"Detection"`
+	Detection ImageImageDetection `json:"detection"`
 }
 
 // GetId returns ImageImage.Id, and is useful for accessing the field via an interface.
@@ -78,8 +122,12 @@ func (v *ImageImage) GetDetection() ImageImageDetection { return v.Detection }
 
 // ImageImageDetection includes the requested fields of the GraphQL type Detection.
 type ImageImageDetection struct {
+	Id     int     `json:"id"`
 	Person float64 `json:"person"`
 }
+
+// GetId returns ImageImageDetection.Id, and is useful for accessing the field via an interface.
+func (v *ImageImageDetection) GetId() int { return v.Id }
 
 // GetPerson returns ImageImageDetection.Person, and is useful for accessing the field via an interface.
 func (v *ImageImageDetection) GetPerson() float64 { return v.Person }
@@ -91,38 +139,6 @@ type ImageResponse struct {
 
 // GetImage returns ImageResponse.Image, and is useful for accessing the field via an interface.
 func (v *ImageResponse) GetImage() ImageImage { return v.Image }
-
-// ImagesImagesImage includes the requested fields of the GraphQL type Image.
-type ImagesImagesImage struct {
-	Id        int                        `json:"id"`
-	Filename  string                     `json:"filename"`
-	Detection ImagesImagesImageDetection `json:"Detection"`
-}
-
-// GetId returns ImagesImagesImage.Id, and is useful for accessing the field via an interface.
-func (v *ImagesImagesImage) GetId() int { return v.Id }
-
-// GetFilename returns ImagesImagesImage.Filename, and is useful for accessing the field via an interface.
-func (v *ImagesImagesImage) GetFilename() string { return v.Filename }
-
-// GetDetection returns ImagesImagesImage.Detection, and is useful for accessing the field via an interface.
-func (v *ImagesImagesImage) GetDetection() ImagesImagesImageDetection { return v.Detection }
-
-// ImagesImagesImageDetection includes the requested fields of the GraphQL type Detection.
-type ImagesImagesImageDetection struct {
-	Person float64 `json:"person"`
-}
-
-// GetPerson returns ImagesImagesImageDetection.Person, and is useful for accessing the field via an interface.
-func (v *ImagesImagesImageDetection) GetPerson() float64 { return v.Person }
-
-// ImagesResponse is returned by Images on success.
-type ImagesResponse struct {
-	Images []ImagesImagesImage `json:"images"`
-}
-
-// GetImages returns ImagesResponse.Images, and is useful for accessing the field via an interface.
-func (v *ImagesResponse) GetImages() []ImagesImagesImage { return v.Images }
 
 // __AddDetectionInput is used internally by genqlient
 type __AddDetectionInput struct {
@@ -144,21 +160,29 @@ type __AddImageInput struct {
 // GetFilename returns __AddImageInput.Filename, and is useful for accessing the field via an interface.
 func (v *__AddImageInput) GetFilename() string { return v.Filename }
 
-// __ImageFilenameInput is used internally by genqlient
-type __ImageFilenameInput struct {
-	ImageId int `json:"imageId"`
+// __DetectionInput is used internally by genqlient
+type __DetectionInput struct {
+	Id int `json:"id"`
 }
 
-// GetImageId returns __ImageFilenameInput.ImageId, and is useful for accessing the field via an interface.
-func (v *__ImageFilenameInput) GetImageId() int { return v.ImageId }
+// GetId returns __DetectionInput.Id, and is useful for accessing the field via an interface.
+func (v *__DetectionInput) GetId() int { return v.Id }
+
+// __ImageFilenameInput is used internally by genqlient
+type __ImageFilenameInput struct {
+	Id int `json:"id"`
+}
+
+// GetId returns __ImageFilenameInput.Id, and is useful for accessing the field via an interface.
+func (v *__ImageFilenameInput) GetId() int { return v.Id }
 
 // __ImageInput is used internally by genqlient
 type __ImageInput struct {
-	ImageId int `json:"imageId"`
+	Id int `json:"id"`
 }
 
-// GetImageId returns __ImageInput.ImageId, and is useful for accessing the field via an interface.
-func (v *__ImageInput) GetImageId() int { return v.ImageId }
+// GetId returns __ImageInput.Id, and is useful for accessing the field via an interface.
+func (v *__ImageInput) GetId() int { return v.Id }
 
 func AddDetection(
 	ctx context.Context,
@@ -171,6 +195,8 @@ func AddDetection(
 		Query: `
 mutation AddDetection ($imageId: Int!, $person: Float!) {
 	addDetection(imageId: $imageId, person: $person) {
+		id
+		imageId
 		person
 	}
 }
@@ -227,26 +253,64 @@ mutation AddImage ($filename: String!) {
 	return &data, err
 }
 
+func Detection(
+	ctx context.Context,
+	client graphql.Client,
+	id int,
+) (*DetectionResponse, error) {
+	req := &graphql.Request{
+		OpName: "Detection",
+		Query: `
+query Detection ($id: Int!) {
+	detection(id: $id) {
+		id
+		person
+		image {
+			id
+			filename
+		}
+	}
+}
+`,
+		Variables: &__DetectionInput{
+			Id: id,
+		},
+	}
+	var err error
+
+	var data DetectionResponse
+	resp := &graphql.Response{Data: &data}
+
+	err = client.MakeRequest(
+		ctx,
+		req,
+		resp,
+	)
+
+	return &data, err
+}
+
 func Image(
 	ctx context.Context,
 	client graphql.Client,
-	imageId int,
+	id int,
 ) (*ImageResponse, error) {
 	req := &graphql.Request{
 		OpName: "Image",
 		Query: `
-query Image ($imageId: Int!) {
-	image(imageId: $imageId) {
+query Image ($id: Int!) {
+	image(id: $id) {
 		id
 		filename
-		Detection {
+		detection {
+			id
 			person
 		}
 	}
 }
 `,
 		Variables: &__ImageInput{
-			ImageId: imageId,
+			Id: id,
 		},
 	}
 	var err error
@@ -266,56 +330,24 @@ query Image ($imageId: Int!) {
 func ImageFilename(
 	ctx context.Context,
 	client graphql.Client,
-	imageId int,
+	id int,
 ) (*ImageFilenameResponse, error) {
 	req := &graphql.Request{
 		OpName: "ImageFilename",
 		Query: `
-query ImageFilename ($imageId: Int!) {
-	image(imageId: $imageId) {
+query ImageFilename ($id: Int!) {
+	image(id: $id) {
 		filename
 	}
 }
 `,
 		Variables: &__ImageFilenameInput{
-			ImageId: imageId,
+			Id: id,
 		},
 	}
 	var err error
 
 	var data ImageFilenameResponse
-	resp := &graphql.Response{Data: &data}
-
-	err = client.MakeRequest(
-		ctx,
-		req,
-		resp,
-	)
-
-	return &data, err
-}
-
-func Images(
-	ctx context.Context,
-	client graphql.Client,
-) (*ImagesResponse, error) {
-	req := &graphql.Request{
-		OpName: "Images",
-		Query: `
-query Images {
-	images {
-		id
-		filename
-		Detection {
-			person
-		}
-	}
-}
-`,
-	}
-	var err error
-
-	var data ImagesResponse
 	resp := &graphql.Response{Data: &data}
 
 	err = client.MakeRequest(

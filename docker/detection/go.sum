@@ -1,0 +1,4 @@
+github.com/joho/godotenv v1.4.0 h1:3l4+N6zfMWnkbPEXKng2o2/MR5mSwTrBih4ZEkkz1lg=
+github.com/joho/godotenv v1.4.0/go.mod h1:f4LDr5Voq0i2e/R5DDNOoa2zzDfwtkZa6DnEwAbqwq4=
+github.com/moritztng/perceptionOS/model v0.0.0-20230120232414-366b8aed15a5 h1:NVnORC+ipCCC5inuWYDrK2lIGcjO4Gh2zqcGFFOGCDw=
+github.com/moritztng/perceptionOS/model v0.0.0-20230120232414-366b8aed15a5/go.mod h1:ADJW79vifHV3QQiIF/dA08Dh4OO58jcwBhvh1yF+Ia8=

@@ -37,6 +37,8 @@ type Config struct {
 }
 
 type ResolverRoot interface {
+	Detection() DetectionResolver
+	Image() ImageResolver
 	Mutation() MutationResolver
 	Query() QueryResolver
 }
@@ -46,7 +48,10 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	Detection struct {
-		Person func(childComplexity int) int
+		ID      func(childComplexity int) int
+		Image   func(childComplexity int) int
+		ImageID func(childComplexity int) int
+		Person  func(childComplexity int) int
 	}
 
 	Image struct {
@@ -61,19 +66,25 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		Image     func(childComplexity int, imageID int) int
-		Images    func(childComplexity int) int
+		Detection func(childComplexity int, id int) int
+		Image     func(childComplexity int, id int) int
 		TakeImage func(childComplexity int) int
 	}
 }
 
+type DetectionResolver interface {
+	Image(ctx context.Context, obj *model.Detection) (*model.Image, error)
+}
+type ImageResolver interface {
+	Detection(ctx context.Context, obj *model.Image) (*model.Detection, error)
+}
 type MutationResolver interface {
 	AddImage(ctx context.Context, filename string) (*model.Image, error)
 	AddDetection(ctx context.Context, imageID int, person float64) (*model.Detection, error)
 }
 type QueryResolver interface {
-	Images(ctx context.Context) ([]*model.Image, error)
-	Image(ctx context.Context, imageID int) (*model.Image, error)
+	Image(ctx context.Context, id int) (*model.Image, error)
+	Detection(ctx context.Context, id int) (*model.Detection, error)
 	TakeImage(ctx context.Context) (string, error)
 }
 
@@ -92,6 +103,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
+	case "Detection.id":
+		if e.complexity.Detection.ID == nil {
+			break
+		}
+
+		return e.complexity.Detection.ID(childComplexity), true
+
+	case "Detection.image":
+		if e.complexity.Detection.Image == nil {
+			break
+		}
+
+		return e.complexity.Detection.Image(childComplexity), true
+
+	case "Detection.imageId":
+		if e.complexity.Detection.ImageID == nil {
+			break
+		}
+
+		return e.complexity.Detection.ImageID(childComplexity), true
+
 	case "Detection.person":
 		if e.complexity.Detection.Person == nil {
 			break
@@ -99,7 +131,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Detection.Person(childComplexity), true
 
-	case "Image.Detection":
+	case "Image.detection":
 		if e.complexity.Image.Detection == nil {
 			break
 		}
@@ -144,6 +176,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.AddImage(childComplexity, args["filename"].(string)), true
 
+	case "Query.detection":
+		if e.complexity.Query.Detection == nil {
+			break
+		}
+
+		args, err := ec.field_Query_detection_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Detection(childComplexity, args["id"].(int)), true
+
 	case "Query.image":
 		if e.complexity.Query.Image == nil {
 			break
@@ -154,14 +198,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Image(childComplexity, args["imageId"].(int)), true
-
-	case "Query.images":
-		if e.complexity.Query.Images == nil {
-			break
-		}
-
-		return e.complexity.Query.Images(childComplexity), true
+		return e.complexity.Query.Image(childComplexity, args["id"].(int)), true
 
 	case "Query.takeImage":
 		if e.complexity.Query.TakeImage == nil {
@@ -310,18 +347,33 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_image_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Query_detection_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
 	var arg0 int
-	if tmp, ok := rawArgs["imageId"]; ok {
-		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("imageId"))
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
 		arg0, err = ec.unmarshalNInt2int(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
 	}
-	args["imageId"] = arg0
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_image_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 int
+	if tmp, ok := rawArgs["id"]; ok {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("id"))
+		arg0, err = ec.unmarshalNInt2int(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
 	return args, nil
 }
 
@@ -363,6 +415,94 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 
 // region    **************************** field.gotpl *****************************
 
+func (ec *executionContext) _Detection_id(ctx context.Context, field graphql.CollectedField, obj *model.Detection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Detection_id(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Detection_id(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Detection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Detection_imageId(ctx context.Context, field graphql.CollectedField, obj *model.Detection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Detection_imageId(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ImageID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Detection_imageId(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Detection",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return nil, errors.New("field of type Int does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Detection_person(ctx context.Context, field graphql.CollectedField, obj *model.Detection) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Detection_person(ctx, field)
 	if err != nil {
@@ -402,6 +542,55 @@ func (ec *executionContext) fieldContext_Detection_person(ctx context.Context, f
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return nil, errors.New("field of type Float does not have child fields")
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Detection_image(ctx context.Context, field graphql.CollectedField, obj *model.Detection) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Detection_image(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Detection().Image(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Image)
+	fc.Result = res
+	return ec.marshalOImage2ᚖgithubᚗcomᚋmoritztngᚋperceptionOSᚋdockerᚋapiᚋgraphᚋmodelᚐImage(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Detection_image(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Detection",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Image_id(ctx, field)
+			case "filename":
+				return ec.fieldContext_Image_filename(ctx, field)
+			case "detection":
+				return ec.fieldContext_Image_detection(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Image", field.Name)
 		},
 	}
 	return fc, nil
@@ -495,8 +684,8 @@ func (ec *executionContext) fieldContext_Image_filename(ctx context.Context, fie
 	return fc, nil
 }
 
-func (ec *executionContext) _Image_Detection(ctx context.Context, field graphql.CollectedField, obj *model.Image) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Image_Detection(ctx, field)
+func (ec *executionContext) _Image_detection(ctx context.Context, field graphql.CollectedField, obj *model.Image) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Image_detection(ctx, field)
 	if err != nil {
 		return graphql.Null
 	}
@@ -509,7 +698,7 @@ func (ec *executionContext) _Image_Detection(ctx context.Context, field graphql.
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Detection, nil
+		return ec.resolvers.Image().Detection(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -523,16 +712,22 @@ func (ec *executionContext) _Image_Detection(ctx context.Context, field graphql.
 	return ec.marshalODetection2ᚖgithubᚗcomᚋmoritztngᚋperceptionOSᚋdockerᚋapiᚋgraphᚋmodelᚐDetection(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) fieldContext_Image_Detection(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+func (ec *executionContext) fieldContext_Image_detection(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	fc = &graphql.FieldContext{
 		Object:     "Image",
 		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
+		IsMethod:   true,
+		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
+			case "id":
+				return ec.fieldContext_Detection_id(ctx, field)
+			case "imageId":
+				return ec.fieldContext_Detection_imageId(ctx, field)
 			case "person":
 				return ec.fieldContext_Detection_person(ctx, field)
+			case "image":
+				return ec.fieldContext_Detection_image(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Detection", field.Name)
 		},
@@ -580,8 +775,8 @@ func (ec *executionContext) fieldContext_Mutation_addImage(ctx context.Context, 
 				return ec.fieldContext_Image_id(ctx, field)
 			case "filename":
 				return ec.fieldContext_Image_filename(ctx, field)
-			case "Detection":
-				return ec.fieldContext_Image_Detection(ctx, field)
+			case "detection":
+				return ec.fieldContext_Image_detection(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Image", field.Name)
 		},
@@ -636,8 +831,14 @@ func (ec *executionContext) fieldContext_Mutation_addDetection(ctx context.Conte
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
+			case "id":
+				return ec.fieldContext_Detection_id(ctx, field)
+			case "imageId":
+				return ec.fieldContext_Detection_imageId(ctx, field)
 			case "person":
 				return ec.fieldContext_Detection_person(ctx, field)
+			case "image":
+				return ec.fieldContext_Detection_image(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Detection", field.Name)
 		},
@@ -656,55 +857,6 @@ func (ec *executionContext) fieldContext_Mutation_addDetection(ctx context.Conte
 	return fc, nil
 }
 
-func (ec *executionContext) _Query_images(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	fc, err := ec.fieldContext_Query_images(ctx, field)
-	if err != nil {
-		return graphql.Null
-	}
-	ctx = graphql.WithFieldContext(ctx, fc)
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Images(rctx)
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.Image)
-	fc.Result = res
-	return ec.marshalOImage2ᚕᚖgithubᚗcomᚋmoritztngᚋperceptionOSᚋdockerᚋapiᚋgraphᚋmodelᚐImage(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) fieldContext_Query_images(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Query",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_Image_id(ctx, field)
-			case "filename":
-				return ec.fieldContext_Image_filename(ctx, field)
-			case "Detection":
-				return ec.fieldContext_Image_Detection(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type Image", field.Name)
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _Query_image(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	fc, err := ec.fieldContext_Query_image(ctx, field)
 	if err != nil {
@@ -719,7 +871,7 @@ func (ec *executionContext) _Query_image(ctx context.Context, field graphql.Coll
 	}()
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Image(rctx, fc.Args["imageId"].(int))
+		return ec.resolvers.Query().Image(rctx, fc.Args["id"].(int))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -745,8 +897,8 @@ func (ec *executionContext) fieldContext_Query_image(ctx context.Context, field 
 				return ec.fieldContext_Image_id(ctx, field)
 			case "filename":
 				return ec.fieldContext_Image_filename(ctx, field)
-			case "Detection":
-				return ec.fieldContext_Image_Detection(ctx, field)
+			case "detection":
+				return ec.fieldContext_Image_detection(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Image", field.Name)
 		},
@@ -759,6 +911,68 @@ func (ec *executionContext) fieldContext_Query_image(ctx context.Context, field 
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Query_image_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_detection(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	fc, err := ec.fieldContext_Query_detection(ctx, field)
+	if err != nil {
+		return graphql.Null
+	}
+	ctx = graphql.WithFieldContext(ctx, fc)
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().Detection(rctx, fc.Args["id"].(int))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Detection)
+	fc.Result = res
+	return ec.marshalODetection2ᚖgithubᚗcomᚋmoritztngᚋperceptionOSᚋdockerᚋapiᚋgraphᚋmodelᚐDetection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) fieldContext_Query_detection(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "id":
+				return ec.fieldContext_Detection_id(ctx, field)
+			case "imageId":
+				return ec.fieldContext_Detection_imageId(ctx, field)
+			case "person":
+				return ec.fieldContext_Detection_person(ctx, field)
+			case "image":
+				return ec.fieldContext_Detection_image(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type Detection", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Query_detection_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return
 	}
@@ -2729,13 +2943,44 @@ func (ec *executionContext) _Detection(ctx context.Context, sel ast.SelectionSet
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Detection")
+		case "id":
+
+			out.Values[i] = ec._Detection_id(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "imageId":
+
+			out.Values[i] = ec._Detection_imageId(ctx, field, obj)
+
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
 		case "person":
 
 			out.Values[i] = ec._Detection_person(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
+		case "image":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Detection_image(ctx, field, obj)
+				return res
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -2762,19 +3007,32 @@ func (ec *executionContext) _Image(ctx context.Context, sel ast.SelectionSet, ob
 			out.Values[i] = ec._Image_id(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "filename":
 
 			out.Values[i] = ec._Image_filename(ctx, field, obj)
 
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
-		case "Detection":
+		case "detection":
+			field := field
 
-			out.Values[i] = ec._Image_Detection(ctx, field, obj)
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Image_detection(ctx, field, obj)
+				return res
+			}
 
+			out.Concurrently(i, func() graphql.Marshaler {
+				return innerFunc(ctx)
+
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -2847,26 +3105,6 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Query")
-		case "images":
-			field := field
-
-			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
-				defer func() {
-					if r := recover(); r != nil {
-						ec.Error(ctx, ec.Recover(ctx, r))
-					}
-				}()
-				res = ec._Query_images(ctx, field)
-				return res
-			}
-
-			rrm := func(ctx context.Context) graphql.Marshaler {
-				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
-			}
-
-			out.Concurrently(i, func() graphql.Marshaler {
-				return rrm(innerCtx)
-			})
 		case "image":
 			field := field
 
@@ -2877,6 +3115,26 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_image(ctx, field)
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx, innerFunc)
+			}
+
+			out.Concurrently(i, func() graphql.Marshaler {
+				return rrm(innerCtx)
+			})
+		case "detection":
+			field := field
+
+			innerFunc := func(ctx context.Context) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_detection(ctx, field)
 				return res
 			}
 
@@ -3595,47 +3853,6 @@ func (ec *executionContext) marshalODetection2ᚖgithubᚗcomᚋmoritztngᚋperc
 		return graphql.Null
 	}
 	return ec._Detection(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalOImage2ᚕᚖgithubᚗcomᚋmoritztngᚋperceptionOSᚋdockerᚋapiᚋgraphᚋmodelᚐImage(ctx context.Context, sel ast.SelectionSet, v []*model.Image) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOImage2ᚖgithubᚗcomᚋmoritztngᚋperceptionOSᚋdockerᚋapiᚋgraphᚋmodelᚐImage(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-
-	return ret
 }
 
 func (ec *executionContext) marshalOImage2ᚖgithubᚗcomᚋmoritztngᚋperceptionOSᚋdockerᚋapiᚋgraphᚋmodelᚐImage(ctx context.Context, sel ast.SelectionSet, v *model.Image) graphql.Marshaler {

@@ -10,6 +10,6 @@ import (
 func main() {
 	ctx := context.Background()
 	client := qlient.NewClient("http://localhost:8080/query")
-	resp, err := qlient.AddDetection(ctx, client, 12, 0.5)
-	fmt.Println(resp.AddDetection.GetPerson(), err)
+	resp, err := qlient.ImageFilename(ctx, client, 13)
+	fmt.Println(resp.Image.Filename, err)
 }
