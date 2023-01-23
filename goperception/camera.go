@@ -21,6 +21,11 @@ func Camera(url string) (capture *VideoCapture) {
 	return
 }
 
+func (capture *VideoCapture) SetResolution(width int, height int) {
+	C.set_resolution(capture.p, (C.int)(width), (C.int)(height))
+	return
+}
+
 func (capture *VideoCapture) SaveImage(filename string) {
 	var cfilename *C.char = C.CString(filename)
 	defer C.free(unsafe.Pointer(cfilename))
