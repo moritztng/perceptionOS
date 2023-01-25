@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 	"os"
 	"strconv"
+	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	_ "github.com/joho/godotenv/autoload"
@@ -16,6 +16,9 @@ import (
 var apiUrl = os.Getenv("QLIENT_API_URL")
 var consumerAddress = os.Getenv("MESSAGING_CONSUMER_ADDRESS")
 var apiClient = qlient.NewClient(apiUrl)
+var detectionSensitivity, _ = strconv.ParseFloat(os.Getenv("DETECTION_SENSITIVITY"), 64)
+var notificationInterval, _ = time.ParseDuration(os.Getenv("NOTIFICATION_INTERVAL"))
+var lastDetectionTime time.Time
 var bot, _ = tgbotapi.NewBotAPI(os.Getenv("TELEGRAM_BOT_TOKEN"))
 
 func handler(message string) {
@@ -24,13 +27,18 @@ func handler(message string) {
 	response, _ := qlient.Detection(ctx, apiClient, detectionId)
 	personDetection := response.Detection.Person
 	fmt.Println(personDetection)
-	msg := tgbotapi.NewMessage(5519266765, strconv.FormatFloat(personDetection, 'E', -1, 64))
-	bot.Send(msg)
+	if personDetection > detectionSensitivity {
+		detectionTime := time.Now()
+		lastDetectionInterval := detectionTime.Sub(lastDetectionTime)
+		if lastDetectionInterval > notificationInterval {
+			botMessage := tgbotapi.NewMessage(5519266765, fmt.Sprintf("Person detected with %.6f propability!", personDetection))
+			bot.Send(botMessage)
+		}
+		lastDetectionTime = detectionTime
+	}
 }
 
 func main() {
-	bot.Debug = true
-	log.Printf("Authorized on account %s", bot.Self.UserName)
 	messageConsumer := messaging.NewNotificationConsumer(handler)
 	messageConsumer.Listen(consumerAddress)
 }
