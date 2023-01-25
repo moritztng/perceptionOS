@@ -40,7 +40,7 @@ func handler(message string) {
 	storageClient.Get(ctx, bucketName, fileName, tempDir)
 	filePath := filepath.Join(tempDir, fileName)
 	fmt.Println(filePath)
-	modelInput := model.Preprocess(filePath)
+	modelInput := model.Preprocess(filePath, 416, 416)
 	modelOutput := yoloModel.Run(modelInput)
 	personDetection := model.Postprocess(modelOutput)
 	idResponse, _ := qlient.AddDetection(ctx, apiClient, imageId, float64(personDetection))
