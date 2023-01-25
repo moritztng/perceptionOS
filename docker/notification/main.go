@@ -15,6 +15,7 @@ import (
 
 var apiUrl = os.Getenv("QLIENT_API_URL")
 var consumerAddress = os.Getenv("MESSAGING_CONSUMER_ADDRESS")
+var messageTimeout, _ = time.ParseDuration(os.Getenv("MESSAGING_TIMEOUT"))
 var apiClient = qlient.NewClient(apiUrl)
 var detectionSensitivity, _ = strconv.ParseFloat(os.Getenv("DETECTION_SENSITIVITY"), 64)
 var notificationInterval, _ = time.ParseDuration(os.Getenv("NOTIFICATION_INTERVAL"))
@@ -39,6 +40,6 @@ func handler(message string) {
 }
 
 func main() {
-	messageConsumer := messaging.NewNotificationConsumer(handler)
+	messageConsumer := messaging.NewNotificationConsumer(messageTimeout, handler)
 	messageConsumer.Listen(consumerAddress)
 }

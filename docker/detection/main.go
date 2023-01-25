@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"time"
 
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/moritztng/perceptionOS/messaging"
@@ -24,6 +25,7 @@ var bucketName = os.Getenv("STORAGE_BUCKET_NAME")
 var apiUrl = os.Getenv("QLIENT_API_URL")
 var consumerAddress = os.Getenv("MESSAGING_CONSUMER_ADDRESS")
 var producerAddress = os.Getenv("MESSAGING_PRODUCER_ADDRESS")
+var messageTimeout, _ = time.ParseDuration(os.Getenv("MESSAGING_TIMEOUT"))
 var tempDir = os.TempDir()
 var storageClient = storage.NewStorage(storageAddress, accessKeyID, secretAccessKey, useSSL)
 var apiClient = qlient.NewClient(apiUrl)
@@ -49,6 +51,6 @@ func handler(message string) {
 }
 
 func main() {
-	messageConsumer := messaging.NewProcessConsumer(handler)
+	messageConsumer := messaging.NewProcessConsumer(messageTimeout, handler)
 	messageConsumer.Listen(consumerAddress)
 }
