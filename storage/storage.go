@@ -23,3 +23,7 @@ func NewStorage(address string, accessKeyID string, secretAccessKey string, useS
 func (storage Storage) Store(ctx context.Context, bucketName string, objectName string, filePath string, contentType string) {
 	storage.minioClient.FPutObject(ctx, bucketName, objectName, filePath, minio.PutObjectOptions{ContentType: contentType})
 }
+
+func (storage Storage) Get(ctx context.Context, bucketName string, objectName string, filePath string) {
+	storage.minioClient.FGetObject(ctx, bucketName, objectName, filePath, minio.GetObjectOptions{})
+}
