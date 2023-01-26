@@ -1,12 +1,15 @@
 go 1.19
 
 use (
-	./goperception
+	./sensors
 	./messaging
 	./data
 	./model
 	./storage
 	./qlient
-	./docker/api
-	./docker/camera
+	./services/api
+	./services/camera
+	./services/detection
+	./services/notification
+	./services/scheduler
 )

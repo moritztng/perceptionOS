@@ -1,4 +1,4 @@
-module github.com/moritztng/perceptionOS/docker/detection
+module github.com/moritztng/perceptionOS/services/detection
 
 go 1.19
 

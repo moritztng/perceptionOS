@@ -29,8 +29,8 @@ github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd h1:TRLaZ9cD/w
 github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd/go.mod h1:6dJC0mAP4ikYIbvyc7fijjWJddQyLn8Ig3JB5CqoB9Q=
 github.com/modern-go/reflect2 v1.0.2 h1:xBagoLtFs94CBntxluKeaWgTMpvLxC4ur3nMaC9Gz0M=
 github.com/modern-go/reflect2 v1.0.2/go.mod h1:yWuevngMOJpCy52FWWMvUC8ws7m/LJsjYzDa0/r8luk=
-github.com/moritztng/perceptionOS/goperception v0.0.0-20230112020450-fdbe634aae3a h1:LjRavwf6zPwjRqmxla1yJyZpL/g2k6Le337dU06YkbM=
-github.com/moritztng/perceptionOS/goperception v0.0.0-20230112020450-fdbe634aae3a/go.mod h1:416rWRhFmsvh1VxjGgfq+ed4IR9BtoyZiKjqTzGVQUQ=
+github.com/moritztng/perceptionOS/sensors v0.0.0-20230112020450-fdbe634aae3a h1:LjRavwf6zPwjRqmxla1yJyZpL/g2k6Le337dU06YkbM=
+github.com/moritztng/perceptionOS/sensors v0.0.0-20230112020450-fdbe634aae3a/go.mod h1:416rWRhFmsvh1VxjGgfq+ed4IR9BtoyZiKjqTzGVQUQ=
 github.com/moritztng/perceptionOS/messaging v0.0.0-20230113011526-8b9b84145328 h1:dzVZsSoyupt1nR1Uc2POc8Y5XE5+F767EN0UlXe1Zf4=
 github.com/moritztng/perceptionOS/messaging v0.0.0-20230113011526-8b9b84145328/go.mod h1:kk8zOc/uAimvqBuuHfULJwpW/HH9JawC4qg4Z2+0OJM=
 github.com/moritztng/perceptionOS/storage v0.0.0-20230113000954-d7a20573dbef h1:uff4ODP/Tp1ONM8Ii4snnO83M4tSyg2XTE9xW5xETMQ=

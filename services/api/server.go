@@ -8,8 +8,8 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/moritztng/perceptionOS/data"
-	"github.com/moritztng/perceptionOS/docker/api/graph"
 	"github.com/moritztng/perceptionOS/messaging"
+	"github.com/moritztng/perceptionOS/services/api/graph"
 )
 
 const defaultPort = "8080"

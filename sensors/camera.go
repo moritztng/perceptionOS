@@ -1,4 +1,4 @@
-package goperception
+package sensors
 
 /*
 #include <stdlib.h>

@@ -8,7 +8,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/moritztng/perceptionOS/docker/api/graph/model"
+	"github.com/moritztng/perceptionOS/services/api/graph/model"
 )
 
 // Image is the resolver for the image field.

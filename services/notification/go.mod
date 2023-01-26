@@ -1,4 +1,4 @@
-module github.com/moritztng/perceptionOS/docker/notification
+module github.com/moritztng/perceptionOS/services/notification
 
 go 1.19
 

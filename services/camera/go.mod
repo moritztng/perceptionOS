@@ -1,11 +1,11 @@
-module github.com/moritztng/perceptionOS/docker/camera
+module github.com/moritztng/perceptionOS/services/camera
 
 go 1.19
 
 require (
 	github.com/google/uuid v1.3.0
 	github.com/joho/godotenv v1.4.0
-	github.com/moritztng/perceptionOS/goperception v0.0.0-20230112020450-fdbe634aae3a
+	github.com/moritztng/perceptionOS/sensors v0.0.0-20230112020450-fdbe634aae3a
 	github.com/moritztng/perceptionOS/messaging v0.0.0-20230113011526-8b9b84145328
 	github.com/moritztng/perceptionOS/storage v0.0.0-20230113000954-d7a20573dbef
 )

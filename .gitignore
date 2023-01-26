@@ -5,11 +5,9 @@
 *.pyc
 *.db
 *.jpg
+*.onnx
+.env
+
 env
-node_modules
-dist
-migrations
-CMakeCache.txt
-CMakeFiles
-Makefile
-cmake_install.cmake
+onnxruntime
+build

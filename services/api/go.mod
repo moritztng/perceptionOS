@@ -1,4 +1,4 @@
-module github.com/moritztng/perceptionOS/docker/api
+module github.com/moritztng/perceptionOS/services/api
 
 go 1.19
 

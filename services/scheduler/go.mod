@@ -1,4 +1,4 @@
-module github.com/moritztng/perceptionOS/docker/scheduler
+module github.com/moritztng/perceptionOS/services/scheduler
 
 go 1.19
 

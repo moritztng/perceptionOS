@@ -8,9 +8,9 @@ import (
 
 	"github.com/google/uuid"
 	_ "github.com/joho/godotenv/autoload"
-	"github.com/moritztng/perceptionOS/goperception"
 	"github.com/moritztng/perceptionOS/messaging"
 	"github.com/moritztng/perceptionOS/qlient"
+	"github.com/moritztng/perceptionOS/sensors"
 	"github.com/moritztng/perceptionOS/storage"
 )
 
@@ -33,7 +33,7 @@ const contentType = "image/jpeg"
 
 func handler(message string) {
 	ctx := context.Background()
-	camera := goperception.Camera(cameraUrl)
+	camera := sensors.Camera(cameraUrl)
 	id := uuid.New().String()
 	fileName := id + ".jpg"
 	filePath := filepath.Join(tempDir, fileName)
